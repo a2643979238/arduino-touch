@@ -28,30 +28,22 @@ void setup() {
   // 配置中断引脚 (需要硬件连接: Arduino Pin 9 -> Pin 3)
   pinMode(USB_INT_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(USB_INT_PIN), usbInterruptHandler, FALLING);
-
-  Serial.println(F("USB HID Manager - Interrupt Enhanced"));
-  Serial.println(F("INT pin configured for hot-plug detection"));
+  Serial.println(F("USB HID Manager - Interrupt Mode"));
 #else
   Serial.println(F("USB HID Manager - Polling Mode"));
 #endif
 
   if (Usb.Init() == -1) {
-    Serial.println(F("USB Host initialization failed"));
+    Serial.println(F("USB Host init failed"));
     while (1)
-      ;  // Halt
+      ;
   }
 
-  Serial.println(F("Supporting keyboard + mouse (optimized)"));
-  Serial.println(F("Waiting for devices...\n"));
+  Serial.println(F("Ready"));
 
   // 初始化HID管理器实例
   hid1.init();
   hid2.init();
-
-  // 显示内存使用情况
-  Serial.print(F("Free memory: "));
-  Serial.print(freeMemory());
-  Serial.println(F(" bytes"));
 }
 
 // 简化的内存检测函数（避免编译错误）
@@ -73,10 +65,6 @@ void loop() {
   if (usbInterruptFlag) {
     usbInterruptFlag = false;
     forceCheck = true;
-
-#if DEBUG_MODE
-    Serial.println(F("USB interrupt detected"));
-#endif
   }
 #endif
 
@@ -95,24 +83,13 @@ void loop() {
     }
   }
 
-  // 定期输出状态和性能统计
+  // 简化的状态报告
   static unsigned long lastReport = 0;
-  if (currentTime - lastReport > 20000) {  // 每20秒报告一次
-    Serial.println(F("=== System Status ==="));
-
-    Serial.print(F("HID1: "));
+  if (currentTime - lastReport > 30000) {  // 每30秒报告一次
+    Serial.print(F("Status - HID1: "));
     hid1.printConnectedDevices();
     Serial.print(F("HID2: "));
     hid2.printConnectedDevices();
-
-    // 性能统计
-    hid1.printMemoryUsage();
-
-    Serial.print(F("Free memory: "));
-    Serial.print(freeMemory());
-    Serial.println(F(" bytes"));
-
-    Serial.println();
     lastReport = currentTime;
   }
 }

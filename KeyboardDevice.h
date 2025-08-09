@@ -26,13 +26,13 @@ public:
 
   // 初始化键盘设备
   void init();
-  
+
   // 重置设备状态（内存优化版本）
   void reset();
 
   // 解析键盘HID报告
   void parseKeyboardReport(uint8_t len, uint8_t* data);
-  
+
   // 公共访问初始化状态
   bool initialized;
 

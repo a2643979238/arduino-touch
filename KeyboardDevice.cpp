@@ -8,7 +8,6 @@ KeyboardDevice::KeyboardDevice() {
 
 void KeyboardDevice::init() {
   initialized = true;
-  Serial.println(F("Keyboard device initialized"));
 }
 
 void KeyboardDevice::reset() {

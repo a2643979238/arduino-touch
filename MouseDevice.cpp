@@ -12,7 +12,6 @@ void MouseDevice::init() {
   initialized = true;
   absoluteX = 0;
   absoluteY = 0;
-  Serial.println(F("Mouse device initialized"));
 }
 
 void MouseDevice::reset() {
